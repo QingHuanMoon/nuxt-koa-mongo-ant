@@ -10,6 +10,13 @@ class UserApi
       mock: false
     })
   }
+  static getMenuList()
+  {
+    return request({
+      url: '/menu/list',
+      method: 'get',
+    })
+  }
 }
 
 export default UserApi

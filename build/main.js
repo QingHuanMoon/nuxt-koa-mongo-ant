@@ -259,7 +259,7 @@ const EnvConfig = {
 };
 /* harmony default export */ __webpack_exports__["a"] = (Object.assign({
     env,
-    mock: false,
+    mock: true,
     namespace: 'vite'
 }, EnvConfig[env]));
 
@@ -606,6 +606,7 @@ module.exports = {
      ** Run ESLINT on save
      */
     extend(config, ctx) {
+      config.resolve.alias['vue$'] = 'vue/dist/vue.esm.js';
       if (ctx.Client) {
         config.module.rules.push({
           enforce: 'pre',

@@ -1,12 +1,11 @@
 <template>
   <section>
     <div class="page">
-        <a-layout-sider class="left" v-model="collapsed" :trigger="null" collapsible>
-          <div class="logo" />
-          <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-          </a-menu>
-        </a-layout-sider>
-      <div class="right">
+      <a-layout-sider class="left" v-model="collapsed" :trigger="null" collapsible>
+          <LayoutLogoComponent />
+          <LayoutMenuComponent />
+      </a-layout-sider>
+      <div class="right" :style="{marginLeft: this.width[collapsed ? 1 : 0] + 'px'}">
         <a-layout-header class="header">
           <a-row>
             <a-col span=1>
@@ -52,12 +51,12 @@
   </section>
 </template>
 <script>
+import UserApi from '../api/userApi';
 export default {
-  data() {
-    return {
+  data: () => ({
       collapsed: false,
-    };
-  },
+      width: [200, 80],
+  }),
 };
 </script>
 <style lang="less">
@@ -66,13 +65,16 @@ export default {
   height: 100vh;
   position: relative;
   .left {
+    background-color:#fff;
     position: fixed;
     width: 200px;
     height: 100%;
     overflow-y: auto;
+    &.ant-layout-sider-collapsed {
+      width: 64px !important;
+    }
   }
   .right {
-    margin-left: 200px;
     background-color: #f0f2f5;
     height: 100%;
     .header {

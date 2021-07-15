@@ -38,7 +38,8 @@ module.exports = {
     /*
      ** Run ESLINT on save
      */
-    extend (config, ctx) {
+    extend(config, ctx) {
+      config.resolve.alias['vue$'] = 'vue/dist/vue.esm.js'
       if (ctx.Client) {
         config.module.rules.push({
           enforce: 'pre',
