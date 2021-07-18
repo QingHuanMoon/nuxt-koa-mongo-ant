@@ -6,6 +6,7 @@
 
 <script>
   import { isEmail, isPhone } from '../public/validate'
+  import UserApi from '../api/userApi'
   export default {
     name: 'Dashboard',
     data: () => ({
@@ -82,7 +83,17 @@
       ],
     }),
     created() {},
-    mounted() {},
-    methods: {},
+    mounted() {
+      console.log(213)
+      this.loadCheck()
+    },
+    methods: {
+      async loadCheck() {
+        try {
+          let res = await UserApi.check()
+          console.log(res)
+        } catch (e) {}
+      }
+    },
   }
 </script>

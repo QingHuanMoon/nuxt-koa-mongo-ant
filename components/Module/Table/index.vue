@@ -2,7 +2,7 @@
   <section>
     <a-tabs
       v-model="activeKey"
-      type="editable-card"
+      type="card"
       :hide-add="true"
       @tabClick="tabChangeCallBack"
     >

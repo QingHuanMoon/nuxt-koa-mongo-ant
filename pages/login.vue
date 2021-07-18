@@ -23,6 +23,7 @@
 
 <script>
 import {isEmail, isPassword} from '@/public/validate'
+import Storage from '../utils/storage';
 export default {
   layout: 'full',
   name: 'LoginPage',
@@ -44,6 +45,8 @@ export default {
            form: this.loginForm,
            rules: this.rules
          })
+         Storage.setItem('userInfo', res)
+         this.$router.push({name: 'dashboard'})
         } else {
           let keys = Object.keys(errors)
           var msg = ''

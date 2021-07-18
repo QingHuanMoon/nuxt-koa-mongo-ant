@@ -1,5 +1,6 @@
 import Koa from 'koa'
 import koaBody from 'koa-body';
+import KoaJwt from 'koa-jwt';
 import { Nuxt, Builder } from 'nuxt'
 import BootStrap from './bootstrap';
 
@@ -23,6 +24,20 @@ async function start () {
   }
 
   app.use(koaBody())
+  app.use(KoaJwt({ secret: 'qinghuan' }).unless({
+    path: [
+      '/login',
+      /^\/_nuxt/,
+      /^\/__webpack_hmr/,
+      '/favicon.ico'
+    ]
+  }))
+
+
+
+  app.on('error', (err, ctx) => {
+    console.log(ctx)
+  })
 
   // 路由
   BootStrap.RouterRegister(app)

@@ -20,7 +20,7 @@ const EnvConfig = {
 export default {
     env,
     mock: true,
-    namespace: 'vite',
+    namespace: 'nuxt',
     ...EnvConfig[env]
 
 }

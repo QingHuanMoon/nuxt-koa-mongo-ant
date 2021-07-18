@@ -87,9 +87,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_koa___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_koa__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa_body__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa_body___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_koa_body__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_nuxt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bootstrap__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_koa_jwt__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_koa_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_koa_jwt__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_nuxt__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_nuxt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_nuxt__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__bootstrap__ = __webpack_require__(7);
+
 
 
 
@@ -101,22 +104,29 @@ async function start() {
   const port = process.env.PORT || 3000;
 
   // Import and Set Nuxt.js options
-  const config = __webpack_require__(20);
+  const config = __webpack_require__(22);
   config.dev = !(app.env === 'production');
 
   // Instantiate nuxt.js
-  const nuxt = new __WEBPACK_IMPORTED_MODULE_2_nuxt__["Nuxt"](config);
+  const nuxt = new __WEBPACK_IMPORTED_MODULE_3_nuxt__["Nuxt"](config);
 
   // Build in development
   if (config.dev) {
-    const builder = new __WEBPACK_IMPORTED_MODULE_2_nuxt__["Builder"](nuxt);
+    const builder = new __WEBPACK_IMPORTED_MODULE_3_nuxt__["Builder"](nuxt);
     await builder.build();
   }
 
   app.use(__WEBPACK_IMPORTED_MODULE_1_koa_body___default()());
+  app.use(__WEBPACK_IMPORTED_MODULE_2_koa_jwt___default()({ secret: 'qinghuan' }).unless({
+    path: ['/login', /^\/_nuxt/, /^\/__webpack_hmr/, '/favicon.ico']
+  }));
+
+  app.on('error', (err, ctx) => {
+    console.log(ctx);
+  });
 
   // 路由
-  __WEBPACK_IMPORTED_MODULE_3__bootstrap__["a" /* default */].RouterRegister(app);
+  __WEBPACK_IMPORTED_MODULE_4__bootstrap__["a" /* default */].RouterRegister(app);
 
   app.use(ctx => {
     ctx.status = 200;
@@ -129,7 +139,7 @@ async function start() {
 
   console.log('服务器启动成功,请点击访问->' + host + ':' + port); // eslint-disable-line no-console
 
-  __WEBPACK_IMPORTED_MODULE_3__bootstrap__["a" /* default */].ProviderRegister();
+  __WEBPACK_IMPORTED_MODULE_4__bootstrap__["a" /* default */].ProviderRegister();
 }
 
 start();
@@ -150,17 +160,23 @@ module.exports = require("koa-body");
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("nuxt");
+module.exports = require("koa-jwt");
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+module.exports = require("nuxt");
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 class BootStrap {
   // 服务自动注册
   static ProviderRegister() {
-    const requireComponent = __webpack_require__(7);
+    const requireComponent = __webpack_require__(8);
     requireComponent.keys().forEach(fileName => {
       const componentConfig = requireComponent(fileName);
       componentConfig.default.boot();
@@ -169,7 +185,7 @@ class BootStrap {
 
   // 路由自动注册
   static RouterRegister(app) {
-    const requireComponent = __webpack_require__(10);
+    const requireComponent = __webpack_require__(11);
     requireComponent.keys().forEach(fileName => {
       const componentConfig = requireComponent(fileName);
       app.use(componentConfig.default.routes(), componentConfig.default.allowedMethods());
@@ -180,11 +196,11 @@ class BootStrap {
 /* harmony default export */ __webpack_exports__["a"] = (BootStrap);
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./db.js": 8
+	"./db.js": 9
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -200,17 +216,17 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 7;
+webpackContext.id = 8;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__public_config__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__public_config__ = __webpack_require__(10);
 
 
 class Db {
@@ -234,7 +250,7 @@ class Db {
 /* harmony default export */ __webpack_exports__["default"] = (Db);
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -260,16 +276,16 @@ const EnvConfig = {
 /* harmony default export */ __webpack_exports__["a"] = (Object.assign({
     env,
     mock: true,
-    namespace: 'vite'
+    namespace: 'nuxt'
 }, EnvConfig[env]));
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./index.js": 11,
-	"./user.js": 12
+	"./index.js": 12,
+	"./user.js": 13
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -285,10 +301,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 10;
+webpackContext.id = 11;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -322,14 +338,14 @@ router.get('/json', async (ctx, next) => {
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_koa_router__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_koa_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_koa_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__controller_UserController__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__controller_UserController__ = __webpack_require__(14);
 
 
 
@@ -338,38 +354,51 @@ const router = new __WEBPACK_IMPORTED_MODULE_0_koa_router___default.a();
 router.prefix('/api/users');
 
 router.post('/login', __WEBPACK_IMPORTED_MODULE_1__controller_UserController__["a" /* default */].login);
+router.get('/check', __WEBPACK_IMPORTED_MODULE_1__controller_UserController__["a" /* default */].check);
 
 /* harmony default export */ __webpack_exports__["default"] = (router);
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__service_UserService__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_tools__ = __webpack_require__(17);
-
-
-class UserController {
-  static async login(ctx, next) {
-    let params = ctx.request.body;
-    let res = await __WEBPACK_IMPORTED_MODULE_0__service_UserService__["a" /* default */].loginByEmailAndPassword(params);
-    if (res) {
-      ctx.body = __WEBPACK_IMPORTED_MODULE_1__utils_tools__["a" /* default */].success('登录成功');
-    } else {
-      ctx.body = __WEBPACK_IMPORTED_MODULE_1__utils_tools__["a" /* default */].fail('登录失败');
-    }
-  }
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (UserController);
 
 /***/ }),
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__repository_UserRepo__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__service_UserService__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_tools__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__);
+
+
+
+class UserController {
+  static async login(ctx, next) {
+    let params = ctx.request.body;
+    let res = await __WEBPACK_IMPORTED_MODULE_0__service_UserService__["a" /* default */].loginByEmailAndPassword(params.form);
+    if (res) {
+      let timestamp = new Date().getTime();
+      let data = res._doc;
+      const token = __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken___default.a.sign({
+        data: Object.assign({}, data, { timestamp })
+      }, 'qinghuan', { expiresIn: 60 });
+      return ctx.body = __WEBPACK_IMPORTED_MODULE_1__utils_tools__["a" /* default */].success('登录成功', Object.assign({}, data, { token, timestamp }));
+    } else {
+      return ctx.body = __WEBPACK_IMPORTED_MODULE_1__utils_tools__["a" /* default */].fail('登录失败');
+    }
+  }
+
+  static async check(ctx, next) {
+    return ctx.body = 'check';
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (UserController);
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__repository_UserRepo__ = __webpack_require__(16);
 
 
 class UserService {
@@ -381,23 +410,23 @@ class UserService {
 /* harmony default export */ __webpack_exports__["a"] = (UserService);
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__model_userSchema__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__model_userSchema__ = __webpack_require__(17);
 
 class UserRepo {
   static async findUser(params) {
     let res = await __WEBPACK_IMPORTED_MODULE_0__model_userSchema__["a" /* default */].findOne(params);
-    return !!res;
+    return res;
   }
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (UserRepo);
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -448,11 +477,11 @@ const UserSchema = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.Schema({
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model('users', UserSchema, 'users'));
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_log4__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_log4__ = __webpack_require__(19);
 
 const CODE = {
   SUCCESS: 200,
@@ -495,11 +524,11 @@ const fail = (msg = '', data = '', code = CODE.BUSSINESS_ERROR) => {
 });
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_log4js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_log4js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_log4js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_log4js__);
 /**
  * 日志存储
@@ -569,13 +598,19 @@ const info = content => {
 });
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = require("log4js");
 
 /***/ }),
-/* 20 */
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("jsonwebtoken");
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = {

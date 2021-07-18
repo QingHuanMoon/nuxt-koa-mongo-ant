@@ -4,7 +4,7 @@ class UserRepo
   static async findUser(params)
   {
     let res = await userSchema.findOne(params)
-    return !!res
+    return res
   }
 }
 

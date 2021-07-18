@@ -10,6 +10,14 @@ class UserApi
       mock: false
     })
   }
+  static check(params = {}) {
+    return request({
+      url: '/users/check',
+      method: 'get',
+      data: params,
+      mock: false,
+    })
+  }
   static getMenuList()
   {
     return request({

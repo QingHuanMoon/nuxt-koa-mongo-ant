@@ -2,23 +2,19 @@
   <section>
     <div class="page">
       <a-layout-sider class="left" v-model="collapsed" :trigger="null" collapsible>
-          <LayoutLogoComponent />
-          <LayoutMenuComponent />
+        <LayoutLogoComponent />
+        <LayoutMenuComponent />
       </a-layout-sider>
-      <div class="right" :style="{marginLeft: this.width[collapsed ? 1 : 0] + 'px'}">
+      <div class="right" :style="{ marginLeft: this.width[collapsed ? 1 : 0] + 'px' }">
         <a-layout-header class="header">
           <a-row>
-            <a-col span=1>
-              <a-icon
-                class="trigger"
-                :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-                @click="() => (collapsed = !collapsed)"
-              />
+            <a-col span="1">
+              <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="() => (collapsed = !collapsed)" />
             </a-col>
-            <a-col span=6>
-              <div class="bread">面包屑</div>
+            <a-col span="6">
+              <LayoutBreadComponent />
             </a-col>
-            <a-col span=1 push=16>
+            <a-col span="1" push="16">
               <div class="user-info">
                 <a-dropdown placement="bottomCenter">
                   <a-avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
@@ -38,12 +34,8 @@
               </div>
             </a-col>
           </a-row>
-
         </a-layout-header>
-        <a-layout-content
-          class="content"
-          :style="{  }"
-        >
+        <a-layout-content class="content" :style="{}">
           <nuxt-child></nuxt-child>
         </a-layout-content>
       </div>
@@ -51,13 +43,13 @@
   </section>
 </template>
 <script>
-import UserApi from '../api/userApi';
+import UserApi from '../api/userApi'
 export default {
   data: () => ({
-      collapsed: false,
-      width: [200, 80],
-  }),
-};
+    collapsed: false,
+    width: [200, 80]
+  })
+}
 </script>
 <style lang="less">
 .page {
@@ -65,7 +57,7 @@ export default {
   height: 100vh;
   position: relative;
   .left {
-    background-color:#fff;
+    background-color: #fff;
     position: fixed;
     width: 200px;
     height: 100%;
@@ -90,7 +82,6 @@ export default {
       border-radius: 10px;
       background-color: #fff;
     }
-
   }
 }
 </style>

@@ -4,7 +4,8 @@
 
 import axios from 'axios'
 import config from '../public/config';
-import {notification} from 'ant-design-vue';
+import { notification } from 'ant-design-vue';
+import Storage from './storage';
 const TOKEN_INVALID = 'Token认证失败,请重新登录'
 const NETWORK_ERROR = '网络请求异常,请重新登录'
 
@@ -18,14 +19,16 @@ const service = axios.create({
 // 请求拦截
 service.interceptors.request.use((req) => {
     // TO-DO
-    const headers = req.headers
-    if (!headers.Authorization) headers.Authorization = 'Bear Token'
+  const headers = req.headers
+  const { token } = Storage.getItem('userInfo') || ''
+    if (!headers.Authorization) headers.Authorization = 'Bearer ' + token
     return req
 })
 
-// 相应拦截
+// 响应拦截
 service.interceptors.response.use((res) => {
-    const { code, data, msg } = res.data
+  console.log(res)
+  const { code, data, msg } = res.data
     if (code === 200) {
         return data
     } else if (code === 40001) {
@@ -54,11 +57,15 @@ function request(options) {
         options.params = options.data
     }
 
-    if (config.env === 'prod') {
-        service.defaults.baseURL = config.baseApi
+  if (config.env === 'prod') {
+    service.defaults.baseURL = config.baseApi
+  } else {
+    if (options.mock === undefined) {
+      service.defaults.baseURL = config.mock ? config.mockApi : config.baseApi
     } else {
-        service.defaults.baseURL = config.mock ? config.mockApi : config.baseApi
+      service.defaults.baseURL = options.mock ? config.mockApi : config.baseApi
     }
+  }
 
 
 
@@ -66,7 +73,7 @@ function request(options) {
 }
 
 ['get', 'post', 'put', 'delete', 'patch'].forEach(item => {
-    request[item] = (url, data, options) => {
+  request[item] = (url, data, options) => {
         return request({
             url,
             data,
