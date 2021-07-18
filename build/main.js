@@ -62,7 +62,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,15 +83,105 @@ module.exports = require("koa-router");
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_koa__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
+
+
+const UserSchema = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.Schema({
+  userId: {
+    type: Number,
+    title: '用户ID',
+    form: 'hidden'
+
+  },
+  userName: {
+    type: String,
+    title: '用户名称',
+    form: 'input'
+  },
+  password: {
+    type: String,
+    title: '密码',
+    form: 'input',
+    noQuery: true
+  },
+  email: {
+    type: String,
+    title: '邮箱',
+    form: 'input'
+  },
+  mobile: {
+    type: String,
+    title: '手机',
+    form: 'input'
+  },
+  sex: {
+    type: Number,
+    title: '性别',
+    form: 'select',
+    options: [{ label: '男', value: 0 }, { label: '女', value: 1 }]
+  },
+  deptId: {
+    type: Array,
+    title: '所属部门',
+    form: 'input'
+  },
+  job: {
+    type: String,
+    title: '工作',
+    form: 'input'
+  },
+  state: {
+    type: Number,
+    default: 1,
+    title: '用户状态',
+    form: 'input'
+  },
+  role: {
+    type: Number,
+    default: 1,
+    title: '角色',
+    form: 'input'
+  },
+  createdTime: {
+    type: Date,
+    default: Date.now(),
+    title: '创建时间',
+    form: 'hidden'
+  },
+  lastLoginTime: {
+    type: Date,
+    default: Date.now(),
+    title: '最后登录时间',
+    form: 'hidden'
+  },
+  remark: {
+    type: String,
+    title: '备注',
+    info: {
+      documentName: 'users'
+    },
+    form: 'hidden'
+  }
+});
+
+/* harmony default export */ __webpack_exports__["default"] = (UserSchema);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_koa__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_koa___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_koa__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa_body__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa_body__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa_body___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_koa_body__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_koa_jwt__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_koa_jwt__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_koa_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_koa_jwt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_nuxt__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_nuxt__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_nuxt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_nuxt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__bootstrap__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__bootstrap__ = __webpack_require__(8);
 
 
 
@@ -104,7 +194,7 @@ async function start() {
   const port = process.env.PORT || 3000;
 
   // Import and Set Nuxt.js options
-  const config = __webpack_require__(22);
+  const config = __webpack_require__(23);
   config.dev = !(app.env === 'production');
 
   // Instantiate nuxt.js
@@ -117,9 +207,6 @@ async function start() {
   }
 
   app.use(__WEBPACK_IMPORTED_MODULE_1_koa_body___default()());
-  app.use(__WEBPACK_IMPORTED_MODULE_2_koa_jwt___default()({ secret: 'qinghuan' }).unless({
-    path: ['/login', /^\/_nuxt/, /^\/__webpack_hmr/, '/favicon.ico']
-  }));
 
   app.on('error', (err, ctx) => {
     console.log(ctx);
@@ -127,6 +214,9 @@ async function start() {
 
   // 路由
   __WEBPACK_IMPORTED_MODULE_4__bootstrap__["a" /* default */].RouterRegister(app);
+
+  // 模型
+  __WEBPACK_IMPORTED_MODULE_4__bootstrap__["a" /* default */].ModelRegister(app);
 
   app.use(ctx => {
     ctx.status = 200;
@@ -145,38 +235,41 @@ async function start() {
 start();
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("koa");
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = require("koa-body");
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = require("koa-jwt");
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("nuxt");
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
+
 class BootStrap {
   // 服务自动注册
   static ProviderRegister() {
-    const requireComponent = __webpack_require__(8);
+    const requireComponent = __webpack_require__(9);
     requireComponent.keys().forEach(fileName => {
       const componentConfig = requireComponent(fileName);
       componentConfig.default.boot();
@@ -185,22 +278,34 @@ class BootStrap {
 
   // 路由自动注册
   static RouterRegister(app) {
-    const requireComponent = __webpack_require__(11);
+    const requireComponent = __webpack_require__(12);
     requireComponent.keys().forEach(fileName => {
       const componentConfig = requireComponent(fileName);
       app.use(componentConfig.default.routes(), componentConfig.default.allowedMethods());
     });
+  }
+
+  // 模型自动加载
+  static ModelRegister(app) {
+    global.model = [];
+    const requireComponent = __webpack_require__(22);
+    requireComponent.keys().forEach(fileName => {
+      const componentConfig = requireComponent(fileName);
+      const documentName = componentConfig.default.obj.remark.info.documentName;
+      global.model[`${documentName}Schema`] = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model(documentName, componentConfig.default, documentName);
+    });
+    console.log('模型挂载成功...');
   }
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (BootStrap);
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./db.js": 9
+	"./db.js": 10
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -216,17 +321,17 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 8;
+webpackContext.id = 9;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__public_config__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__public_config__ = __webpack_require__(11);
 
 
 class Db {
@@ -250,7 +355,7 @@ class Db {
 /* harmony default export */ __webpack_exports__["default"] = (Db);
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -280,12 +385,12 @@ const EnvConfig = {
 }, EnvConfig[env]));
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./index.js": 12,
-	"./user.js": 13
+	"./index.js": 13,
+	"./user.js": 14
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -301,10 +406,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 11;
+webpackContext.id = 12;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -338,14 +443,14 @@ router.get('/json', async (ctx, next) => {
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_koa_router__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_koa_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_koa_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__controller_UserController__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__controller_UserController__ = __webpack_require__(15);
 
 
 
@@ -359,11 +464,11 @@ router.get('/check', __WEBPACK_IMPORTED_MODULE_1__controller_UserController__["a
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__service_UserService__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__service_UserService__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_tools__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__);
@@ -394,11 +499,11 @@ class UserController {
 /* harmony default export */ __webpack_exports__["a"] = (UserController);
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__repository_UserRepo__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__repository_UserRepo__ = __webpack_require__(17);
 
 
 class UserService {
@@ -410,71 +515,20 @@ class UserService {
 /* harmony default export */ __webpack_exports__["a"] = (UserService);
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__model_userSchema__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__model_userSchema__ = __webpack_require__(2);
 
 class UserRepo {
   static async findUser(params) {
-    let res = await __WEBPACK_IMPORTED_MODULE_0__model_userSchema__["a" /* default */].findOne(params);
+    let res = await __WEBPACK_IMPORTED_MODULE_0__model_userSchema__["default"].findOne(params);
     return res;
   }
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (UserRepo);
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
-
-
-const UserSchema = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.Schema({
-  userId: {
-    type: Number
-  },
-  userName: {
-    type: String
-  },
-  password: {
-    type: String
-  },
-  email: {
-    type: String
-  },
-  mobile: {
-    type: String
-  },
-  sex: {
-    type: Number
-  },
-  deptId: [],
-  job: String,
-  state: {
-    type: Number,
-    default: 1
-  },
-  role: {
-    type: Number,
-    default: 1
-  },
-  createdTime: {
-    type: Date,
-    default: Date.now()
-  },
-  lastLoginTime: {
-    type: Date,
-    default: Date.now()
-  },
-  remark: String
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model('users', UserSchema, 'users'));
 
 /***/ }),
 /* 18 */
@@ -611,6 +665,29 @@ module.exports = require("jsonwebtoken");
 
 /***/ }),
 /* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./userSchema.js": 2
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 22;
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports) {
 
 module.exports = {

@@ -24,14 +24,7 @@ async function start () {
   }
 
   app.use(koaBody())
-  app.use(KoaJwt({ secret: 'qinghuan' }).unless({
-    path: [
-      '/login',
-      /^\/_nuxt/,
-      /^\/__webpack_hmr/,
-      '/favicon.ico'
-    ]
-  }))
+
 
 
 
@@ -41,6 +34,9 @@ async function start () {
 
   // 路由
   BootStrap.RouterRegister(app)
+
+  // 模型
+  BootStrap.ModelRegister(app)
 
 
   app.use(ctx => {

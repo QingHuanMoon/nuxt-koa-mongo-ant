@@ -13,7 +13,7 @@
         :closable="pane.closable"
         :disabled="pane.disabled"
       >
-        <a-button
+        <!-- <a-button
           v-if="activeKey === 'Show'"
           style="margin-bottom: 20px"
           type="success"
@@ -21,8 +21,8 @@
           @click="showDrawer"
         >
           筛选
-        </a-button>
-        <a-drawer
+        </a-button> -->
+        <!-- <a-drawer
           title="搜索面板"
           :z-index="99999"
           :placement="placement"
@@ -37,7 +37,7 @@
             }"
             @search="searchHanleder"
           />
-        </a-drawer>
+        </a-drawer> -->
 
         <component
           :is="`ModuleTableComponents${activeKey}Component`"
@@ -62,7 +62,6 @@
   import _ from 'lodash'
   export default {
     name: 'ModuleTableComponent',
-
     props: {
       columns: {
         type: Array,
@@ -79,7 +78,7 @@
     },
 
     data: () => ({
-      placement: 'top',
+      placement: 'right',
       panes,
       visible: false,
       activeKey,
@@ -115,11 +114,15 @@
         return _.cloneDeep(this.columns)
       },
       rebuildQueryColumn() {
-        this.columns.forEach((item) => {
+        let columns = this.columns.filter((item) => {
           item.dataIndex = item.key
           item.field = item.key
+          if (!item.noQuery) {
+            return item
+          }
         })
-        return _.cloneDeep(this.columns)
+        console.log('queryColumns->', columns)
+        return _.cloneDeep(columns)
       },
     },
     created() {},
@@ -221,3 +224,7 @@
     },
   }
 </script>
+
+<style lang="less">
+
+</style>

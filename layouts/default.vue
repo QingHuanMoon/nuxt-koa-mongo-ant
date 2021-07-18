@@ -35,15 +35,14 @@
             </a-col>
           </a-row>
         </a-layout-header>
-        <a-layout-content class="content" :style="{}">
-          <nuxt-child></nuxt-child>
+        <a-layout-content class="wrapper" :style="{}">
+          <nuxt-child class="content"></nuxt-child>
         </a-layout-content>
       </div>
     </div>
   </section>
 </template>
 <script>
-import UserApi from '../api/userApi'
 export default {
   data: () => ({
     collapsed: false,
@@ -62,6 +61,7 @@ export default {
     width: 200px;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     &.ant-layout-sider-collapsed {
       width: 64px !important;
     }
@@ -74,13 +74,19 @@ export default {
       background-color: #fff;
       height: 64px;
     }
-    .content {
+    .wrapper {
       // margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px'
       margin: 24px 16px;
       padding: 24px;
       height: calc(100vh - 100px);
       border-radius: 10px;
       background-color: #fff;
+      overflow: hidden;
+      .content {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+      }
     }
   }
 }
