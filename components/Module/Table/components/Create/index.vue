@@ -34,6 +34,8 @@
     },
     methods: {
       async handlerSubmit(formData) {
+        console.log('submit')
+        console.log(this.resourceKey)
         // 创建提交
         let { data } = await request.post(`${this.resourceKey}`, {
           data: formData,

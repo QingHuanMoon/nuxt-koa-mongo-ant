@@ -51,6 +51,10 @@ export default {
 }
 </script>
 <style lang="less">
+* {
+  font-family: 'Source Code Pro';
+  font-weight: 700;
+}
 .page {
   width: 100vw;
   height: 100vh;

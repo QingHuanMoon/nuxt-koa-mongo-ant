@@ -85,6 +85,8 @@ module.exports = require("koa-router");
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__public_validate__ = __webpack_require__(18);
+
 
 
 const UserSchema = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.Schema({
@@ -97,23 +99,39 @@ const UserSchema = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.Schema({
   userName: {
     type: String,
     title: '用户名称',
-    form: 'input'
+    form: 'input',
+    validators: [{ required: true, trigger: 'blur', message: '用户名是必填项' }, { min: 2, trigger: 'blur', message: '最少输入2个字符' }]
   },
   password: {
     type: String,
     title: '密码',
     form: 'input',
-    noQuery: true
+    noQuery: true,
+    props: {
+      type: "password"
+    },
+    validators: [{ required: true, trigger: 'blur', message: '用户名是必填项' }, { min: 6, trigger: 'blur', message: '最少输入2个字符' }]
   },
   email: {
     type: String,
     title: '邮箱',
-    form: 'input'
+    form: 'input',
+    validators: [{
+      required: true,
+      trigger: 'blur',
+      message: '邮箱是必填项'
+    }, { validator: __WEBPACK_IMPORTED_MODULE_1__public_validate__["a" /* isEmail */], trigger: 'blur', message: '必须是邮箱格式' }]
   },
   mobile: {
     type: String,
     title: '手机',
-    form: 'input'
+    form: 'input',
+    validators: [{
+      type: 'string',
+      required: true,
+      trigger: 'blur',
+      message: '手机是必填项'
+    }, { validator: __WEBPACK_IMPORTED_MODULE_1__public_validate__["b" /* isPhone */], trigger: 'blur', message: '必须是手机格式' }]
   },
   sex: {
     type: Number,
@@ -194,7 +212,7 @@ async function start() {
   const port = process.env.PORT || 3000;
 
   // Import and Set Nuxt.js options
-  const config = __webpack_require__(23);
+  const config = __webpack_require__(24);
   config.dev = !(app.env === 'production');
 
   // Instantiate nuxt.js
@@ -288,7 +306,7 @@ class BootStrap {
   // 模型自动加载
   static ModelRegister(app) {
     global.model = [];
-    const requireComponent = __webpack_require__(22);
+    const requireComponent = __webpack_require__(23);
     requireComponent.keys().forEach(fileName => {
       const componentConfig = requireComponent(fileName);
       const documentName = componentConfig.default.obj.remark.info.documentName;
@@ -469,8 +487,8 @@ router.get('/check', __WEBPACK_IMPORTED_MODULE_1__controller_UserController__["a
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__service_UserService__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_tools__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_tools__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jsonwebtoken___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jsonwebtoken__);
 
 
@@ -535,7 +553,244 @@ class UserRepo {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_log4__ = __webpack_require__(19);
+/* unused harmony export isExternal */
+/* unused harmony export isPassword */
+/* unused harmony export isNumber */
+/* unused harmony export isName */
+/* unused harmony export isIP */
+/* unused harmony export isUrl */
+/* unused harmony export isLowerCase */
+/* unused harmony export isUpperCase */
+/* unused harmony export isAlphabets */
+/* unused harmony export isString */
+/* unused harmony export isArray */
+/* unused harmony export isPort */
+/* harmony export (immutable) */ __webpack_exports__["b"] = isPhone;
+/* unused harmony export isIdCard */
+/* harmony export (immutable) */ __webpack_exports__["a"] = isEmail;
+/* unused harmony export isChina */
+/* unused harmony export isBlank */
+/* unused harmony export isTel */
+/* unused harmony export isNum */
+/* unused harmony export isJson */
+/**
+ * @description 判读是否为外链
+ * @param path
+ * @returns {boolean}
+ */
+function isExternal(path) {
+  return (/^(https?:|mailto:|tel:)/.test(path)
+  );
+}
+
+/**
+ * @description 校验密码是否小于6位
+ * @param value
+ * @returns {boolean}
+ */
+function isPassword(rule, value, callback) {
+  if (value.length >= 6) {
+    callback();
+  } else {
+    callback(new Error('密码长度至少为6位'));
+  }
+}
+
+/**
+ * @description 判断是否为数字
+ * @param value
+ * @returns {boolean}
+ */
+function isNumber(value) {
+  const reg = /^[0-9]*$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否是名称
+ * @param value
+ * @returns {boolean}
+ */
+function isName(value) {
+  const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否为IP
+ * @param ip
+ * @returns {boolean}
+ */
+function isIP(ip) {
+  const reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+  return reg.test(ip);
+}
+
+/**
+ * @description 判断是否是传统网站
+ * @param url
+ * @returns {boolean}
+ */
+function isUrl(url) {
+  const reg = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+  return reg.test(url);
+}
+
+/**
+ * @description 判断是否是小写字母
+ * @param value
+ * @returns {boolean}
+ */
+function isLowerCase(value) {
+  const reg = /^[a-z]+$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否是大写字母
+ * @param value
+ * @returns {boolean}
+ */
+function isUpperCase(value) {
+  const reg = /^[A-Z]+$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否是大写字母开头
+ * @param value
+ * @returns {boolean}
+ */
+function isAlphabets(value) {
+  const reg = /^[A-Za-z]+$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否是字符串
+ * @param value
+ * @returns {boolean}
+ */
+function isString(value) {
+  return typeof value === 'string' || value instanceof String;
+}
+
+/**
+ * @description 判断是否是数组
+ * @param arg
+ */
+function isArray(arg) {
+  if (typeof Array.isArray === 'undefined') {
+    return Object.prototype.toString.call(arg) === '[object Array]';
+  }
+  return Array.isArray(arg);
+}
+
+/**
+ * @description 判断是否是端口号
+ * @param value
+ * @returns {boolean}
+ */
+function isPort(value) {
+  const reg = /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否是手机号
+ * @param value
+ * @returns {boolean}
+ */
+function isPhone(rule, value) {
+  const reg = /^1\d{10}$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否是身份证号(第二代)
+ * @param value
+ * @returns {boolean}
+ */
+function isIdCard(value) {
+  const reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否是邮箱
+ * @param value
+ * @returns {boolean}
+ */
+function isEmail(rule, value, callback) {
+  const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+  if (!reg.test(value)) {
+    callback(new Error('请输入正确的邮箱格式'));
+  } else {
+    callback();
+  }
+}
+
+/**
+ * @description 判断是否中文
+ * @param value
+ * @returns {boolean}
+ */
+function isChina(value) {
+  const reg = /^[\u4E00-\u9FA5]{2,4}$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否为空
+ * @param value
+ * @returns {boolean}
+ */
+function isBlank(value) {
+  return value == null || false || value === '' || value.trim() === '' || value.toLocaleLowerCase().trim() === 'null';
+}
+
+/**
+ * @description 判断是否为固话
+ * @param value
+ * @returns {boolean}
+ */
+function isTel(value) {
+  const reg = /^(400|800)([0-9\\-]{7,10})|(([0-9]{4}|[0-9]{3})([- ])?)?([0-9]{7,8})(([- 转])*([0-9]{1,4}))?$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否为数字且最多两位小数
+ * @param value
+ * @returns {boolean}
+ */
+function isNum(value) {
+  const reg = /^\d+(\.\d{1,2})?$/;
+  return reg.test(value);
+}
+
+/**
+ * @description 判断是否为json
+ * @param value
+ * @returns {boolean}
+ */
+function isJson(value) {
+  if (typeof value == 'string') {
+    try {
+      const obj = JSON.parse(value);
+      return !!(typeof obj == 'object' && obj);
+    } catch (e) {
+      return false;
+    }
+  }
+}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_log4__ = __webpack_require__(20);
 
 const CODE = {
   SUCCESS: 200,
@@ -578,11 +833,11 @@ const fail = (msg = '', data = '', code = CODE.BUSSINESS_ERROR) => {
 });
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_log4js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_log4js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_log4js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_log4js__);
 /**
  * 日志存储
@@ -652,19 +907,19 @@ const info = content => {
 });
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = require("log4js");
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsonwebtoken");
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -684,10 +939,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 22;
+webpackContext.id = 23;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = {

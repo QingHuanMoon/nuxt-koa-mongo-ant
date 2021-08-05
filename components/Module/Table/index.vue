@@ -103,6 +103,9 @@
           if (!item.justCreate) {
             return item
           }
+          if (item.validators) {
+            item.validate = item.validators
+          }
         })
         return _.cloneDeep(columns)
       },
@@ -110,6 +113,9 @@
         this.columns.forEach((item) => {
           item.dataIndex = item.key
           item.field = item.key
+          if (item.validators) {
+            item.validate = item.validators
+          }
         })
         return _.cloneDeep(this.columns)
       },
@@ -121,7 +127,6 @@
             return item
           }
         })
-        console.log('queryColumns->', columns)
         return _.cloneDeep(columns)
       },
     },
@@ -187,7 +192,6 @@
         }, secondsToGo * 1000)
       },
       eventHandler(type, data) {
-        console.log(type)
         switch (type) {
           case 'buttonClick':
             switch (data.method) {
@@ -204,7 +208,6 @@
                 this.activeKey = data.method
                 break
               case 'Del':
-                console.log(data)
                 this.delDown(data.record.id)
                 break
             }
